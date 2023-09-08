@@ -1,0 +1,1 @@
+print("Print inicial para começar a palhaçada do projeto... AGORA VAI - 2024")
