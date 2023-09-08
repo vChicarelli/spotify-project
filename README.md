@@ -1,1 +1,4 @@
-# spotify-project
+# Projeto Teste para aprendizagem
+
+### Funcionalidades:
+-
