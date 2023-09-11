@@ -2,9 +2,6 @@ import requests
 import os
 from dotenv.main import load_dotenv
 
-#CLIENT_ID = "754e16a5277c46dd83db73a5d615092d"
-#CLIENT_SECRET = "ffe43b12ef204513baff0b5d6d8eaf2b"
-
 load_dotenv()
 
 CLIENT_ID = os.environ['CLIENT_ID']
