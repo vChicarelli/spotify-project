@@ -2,37 +2,47 @@ import requests
 import os
 from dotenv.main import load_dotenv
 
+
+def songs_playlist(id):
+    playlist_url = base_url + "playlists/" + id
+    response = requests.get(playlist_url,headers=header)
+    playlist_infos = response.json().get('tracks').get('items')
+    art_count = {}
+    for songs in playlist_infos:
+        track = songs.get('track').get('name')
+        print(f"Song name - {track}")
+        for artist in songs.get('track').get('artists'):
+            name = artist.get('name')
+            art_count[name] = art_count.get(name) + 1 if name in art_count else 1
+         
+    top5_names = sorted(art_count.items(), key=lambda item: item[1], reverse=True)
+    print(" \nTop 5 artists for this playlist:")
+    for x in range(0,5):
+        print(f"{x + 1} - {top5_names[x][0]}")
+            
+
 load_dotenv()
 
 CLIENT_ID = os.environ['CLIENT_ID']
 CLIENT_SECRET = os.environ['CLIENT_SECRET']
-
-print(CLIENT_ID)
-print(CLIENT_SECRET)
-
 AUTH_URL = "https://accounts.spotify.com/api/token"
+
+base_url = 'https://api.spotify.com/v1/'
+
 auth_response = requests.post(AUTH_URL, {
     'grant_type': 'client_credentials',
     'client_id': CLIENT_ID,
     'client_secret': CLIENT_SECRET,
 })
 
-#Convert response to JSON
 auth_response_data = auth_response.json()
 
-#Save the access token
 access_token = auth_response_data['access_token']
+ 
 header = {
     'Authorization': 'Bearer {token}'.format(token=access_token)
 }
 
-print(header)
-base_url = 'https://api.spotify.com/v1/'
-playlists_endpoint = 'playlists/79nrN6Y0NwBRjSmCpyxx8M/'
-featured_playlists_url = ''.join([base_url,playlists_endpoint])
-response = requests.get(featured_playlists_url,params="tracks.items(track(TrackObject(name)))",headers=header)
-playlists = response.json().get('tracks').get('items')
 
-for music in playlists:
-    song = music.get('track').get('name')
-    print(f"Song name {song}")
+songs_playlist('79nrN6Y0NwBRjSmCpyxx8M')
+
