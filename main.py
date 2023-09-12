@@ -20,6 +20,11 @@ def songs_playlist(id):
     for x in range(0,5):
         print(f"{x + 1} - {top5_names[x][0]}")
             
+def get_playlist():
+    url = input("Insira o link da playlist:")
+    p_id = url.split("/")[-1].split("?")[0]
+    songs_playlist(p_id)
+
 
 load_dotenv()
 
@@ -44,5 +49,13 @@ header = {
 }
 
 
-songs_playlist('79nrN6Y0NwBRjSmCpyxx8M')
-
+x = -1 
+while x != 0:
+    print("===== M E N U =====")
+    print("1- Verificar playlist")
+    print("0- Sair")
+    resp = input("Digite uma opção: ")
+    if(resp == "1"):
+        get_playlist()
+    if(resp == "0"):
+        exit()
