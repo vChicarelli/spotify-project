@@ -25,6 +25,14 @@ def get_playlist():
     p_id = url.split("/")[-1].split("?")[0]
     songs_playlist(p_id)
 
+def testing():
+    url = input("Playlist url: ")
+    id = url.split("/")[-1].split("?")[0]
+    pl_tracks_url = base_url + "playlists/" + id + "/tracks"
+    response = requests.get(pl_tracks_url,params={'limit': 2},headers=header)
+    rc = response.json().get('error').get('message') if response.json().get('error') != None else 200
+    print(rc)
+
 
 load_dotenv()
 
@@ -53,9 +61,12 @@ x = -1
 while x != 0:
     print("===== M E N U =====")
     print("1- Verificar playlist")
+    print("2- Testing")
     print("0- Sair")
     resp = input("Digite uma opção: ")
     if(resp == "1"):
         get_playlist()
+    if(resp == "2"):
+        testing()
     if(resp == "0"):
         exit()
