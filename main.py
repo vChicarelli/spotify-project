@@ -7,18 +7,23 @@ def songs_playlist(id):
     playlist_url = base_url + "playlists/" + id
     response = requests.get(playlist_url,headers=header)
     playlist_infos = response.json().get('tracks').get('items')
+    user = response.json().get('owner').get('display_name')
+    follow_count = response.json().get('followers').get('total')
+    total_songs = response.json().get('tracks').get('total')
     art_count = {}
+    playlist_songs = []
     for songs in playlist_infos:
-        track = songs.get('track').get('name')
-        print(f"Song name - {track}")
+        playlist_songs.append(songs.get('track').get('name'))
         for artist in songs.get('track').get('artists'):
             name = artist.get('name')
             art_count[name] = art_count.get(name) + 1 if name in art_count else 1
-         
     top5_names = sorted(art_count.items(), key=lambda item: item[1], reverse=True)
+    print(f"\n\nDisplaying playlist created by {user}")
+    print(f"Total songs in playlist - {total_songs}")
     print(" \nTop 5 artists for this playlist:")
     for x in range(0,5):
-        print(f"{x + 1} - {top5_names[x][0]}")
+        print(f"{x + 1} - {top5_names[x][0]} - appears {top5_names[x][1]} times on this playlist")
+    print("\n\n")
             
 def get_playlist():
     url = input("Insira o link da playlist:")
