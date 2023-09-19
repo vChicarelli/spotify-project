@@ -31,12 +31,22 @@ def get_playlist():
     songs_playlist(p_id)
 
 def testing():
-    url = input("Playlist url: ")
-    id = url.split("/")[-1].split("?")[0]
-    pl_tracks_url = base_url + "playlists/" + id + "/tracks"
-    response = requests.get(pl_tracks_url,params={'limit': 2},headers=header)
-    rc = response.json().get('error').get('message') if response.json().get('error') != None else 200
-    print(rc)
+    query = input("Search: ")
+    query_url = base_url + "search"
+    response = requests.get(query_url, params={'q': query, 'type': "track", 'limit': 3}, headers=header)
+    r_query = response.json().get('tracks').get('items')
+    all_results = []
+    
+    for res in r_query:
+        res_dict = {'track': res.get('name'), 'artist': res.get('artists')[0].get('name'), 'album': res.get('album').get('name'), 'uri': res.get('uri')}
+        all_results.append(res_dict)
+    
+    
+    for x in range(0,3):
+        print(f"{x + 1}: {all_results[x].get('track')} - {all_results[x].get('artist')} // {all_results[x].get('album')}")
+    number = int(input("Escolha uma música (digite o número):"))
+    print(f"Escolhida: {all_results[number - 1].get('track')} - {all_results[number - 1].get('artist')} // {all_results[number - 1].get('album')}")    
+    pick_uri = all_results[number - 1].get('uri')
 
 
 load_dotenv()
