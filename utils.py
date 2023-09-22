@@ -24,6 +24,7 @@ class Utils:
         access_token = auth_response_data['access_token']
         
         self.header = {'Authorization': 'Bearer {token}'.format(token=access_token)}
+        self.playlist_id = ""
     
     
     def testing():
@@ -32,6 +33,7 @@ class Utils:
     def songs_playlist(self,id):
         playlist_url = self.base_url + "playlists/" + id
         response = requests.get(playlist_url,headers=self.header)
+        print(response.json())
         playlist_infos = response.json().get('tracks').get('items')
         user = response.json().get('owner').get('display_name')
         follow_count = response.json().get('followers').get('total')
@@ -45,17 +47,18 @@ class Utils:
                 art_count[name] = art_count.get(name) + 1 if name in art_count else 1
         top5_names = sorted(art_count.items(), key=lambda item: item[1], reverse=True)
         print(f"\n\nDisplaying playlist created by {user}")
-        print(f"Total songs in playlist - {total_songs}")
+        print(f"Total songs in playlist - {total_songs} and total of {follow_count} followers")
         print(" \nTop 5 artists for this playlist:")
         for x in range(0,5):
             print(f"{x + 1} - {top5_names[x][0]} - appears {top5_names[x][1]} times on this playlist")
-        user_resp = input("Deseja selecionar essa playlist (S/N)?:").capitalize()
-        pl_id = id if user_resp == "S" else ""
+        
+        self.playlist_id = id if input("Deseja selecionar essa playlist? (S/N):").capitalize() == "S" else ""
 
     def search_song(self):
         query = input("Search: ")
         query_url = self.base_url + "search"
         response = requests.get(query_url, params={'q': query, 'type': "track", 'limit': 3}, headers=self.header)
+        print(response.status_code)
         r_query = response.json().get('tracks').get('items')
         all_results = []
         
