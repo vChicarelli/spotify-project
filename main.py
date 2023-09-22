@@ -7,7 +7,7 @@ while x != 0:
     print("===== M E N U =====")
     print("1- Verificar playlist")
     print("2- Procurar música")
-    print("3- Testing")
+    print("3- Gerar playlist através de músicas recomendadas")
     print("0- Sair")
     resp = input("Digite uma opção: ")
     if(resp == "1"):
@@ -15,9 +15,10 @@ while x != 0:
         p_id = url.split("/")[-1].split("?")[0]
         sp.songs_playlist(p_id)
     if(resp == "2"):
-        sp.search_song()
+        musica = input("Buscar: ")
+        sp.search_song(musica)
     if(resp == "3"):
-        print(sp.playlist_id)
-        sp.testing()
+        sp.generate_recomend()
     if(resp == "0"):
-        exit()
+        sp.create_blank_pl("teste")
+        #exit()
