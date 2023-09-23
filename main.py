@@ -20,5 +20,4 @@ while x != 0:
     if(resp == "3"):
         sp.generate_recomend()
     if(resp == "0"):
-        sp.create_blank_pl("teste")
-        #exit()
+        exit()

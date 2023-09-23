@@ -24,7 +24,6 @@ class Utils:
 
 
         self.header = {'Authorization': 'Bearer {token}'.format(token=access_token)}
-        self.username = "chicarelli"
         self.base_url = 'https://api.spotify.com/v1/'
         self.playlist_id = ""
     
@@ -35,19 +34,21 @@ class Utils:
         response = requests.get(recommend_url, params=fields,headers=self.header).json()
         data = response.get('tracks')
 
-        recommended_songs = [{'name': track.get('name'), 'artist': track.get('artists')[0].get('name',''), 'uri': track.get('uri'),} for track in data]
+        #recommended_songs = [{'name': track.get('name'), 'artist': track.get('artists')[0].get('name',''), 'uri': track.get('uri'),} for track in data]
+        recommended_songs = {'items': {'name': track.get('name'), 'artist': track.get('artists')[0].get('name', ''), 'uri': track.get('uri')} for track in data}
 
         return recommended_songs
-        #print(recommended_songs)
 
     def generate_recomend(self):
         num = int(input("A partir de quantas músicas devo gerar a playlist (usaremos elas como base): "))
+        music_list = []
         for x in range(1,num + 1):
             pick_song = self.search_song(input(f"Nome da música ({x}): "))
             track_uri = pick_song.get('uri')
-            music_list = self.track_recomend(track_uri.split(":")[-1])
-        print(music_list)
-
+            music_list.append(self.track_recomend(track_uri.split(":")[-1]))
+            print(music_list)
+        for dabliu in music_list:
+            print(dabliu.get('items').get('name'))
 
     def songs_playlist(self,id):
         playlist_url = f"{self.base_url}playlists/{id}"
